@@ -22,10 +22,8 @@ iex> Stripy.req(:post, "customers", %{"email" => "a@b.c", "metadata[user_id]" =>
 
 Where `subscriptions` and `customers` are [REST API resources](https://stripe.com/docs/api).
 
-You are expected to build your business logic on top
-of Stripy and abstract things such as Subscriptions
-and Customers; if that's not your cup of tea,
-check out "stripity_stripe" or "stripe_elixir" on Hex.
+If you prefer to work with a higher-level library, check out
+"stripity_stripe" or "stripe_elixir" on Hex.
 
 ## Installation
 
@@ -36,6 +34,15 @@ def deps do
 end
 ```
 If you're not using [application inference](https://elixir-lang.org/blog/2017/01/05/elixir-v1-4-0-released/#application-inference), then add `:stripy` to your `applications` list.
+
+The configure the `stripy` app per environment like so:
+
+```elixir
+config :stripy,
+  secret_key: "sk_test_xxxxxxxxxxxxx", # required
+  endpoint: "https://api.stripe.com/v1/", # optional
+  version: "2017-06-05" # optional
+```
 
 ## About
 
