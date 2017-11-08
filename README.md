@@ -35,7 +35,7 @@ end
 ```
 If you're not using [application inference](https://elixir-lang.org/blog/2017/01/05/elixir-v1-4-0-released/#application-inference), then add `:stripy` to your `applications` list.
 
-The configure the `stripy` app per environment like so:
+Then configure the `stripy` app per environment like so:
 
 ```elixir
 config :stripy,
