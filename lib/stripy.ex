@@ -48,8 +48,11 @@ defmodule Stripy do
 
       iex> Stripy.req(:post, "customers", %{"email" => "a@b.c", "metadata[user_id]" => 1})
       {:ok, %HTTPoison.Response{...}}
+
+      iex> Stripy.req(:get, "subscriptions", %{}, recv_timeout: 10_000)
+      {:ok, %HTTPoison.Response{...}}
   """
-  def req(action, resource, data \\ %{}) when action in [:get, :post, :delete] do
+  def req(action, resource, data \\ %{}, options \\ []) when action in [:get, :post, :delete] do
     header_params = %{
       secret_key: Application.fetch_env!(:stripy, :secret_key),
       version: Application.get_env(:stripy, :version, "2017-06-05")
@@ -57,7 +60,7 @@ defmodule Stripy do
     api_url = Application.get_env(:stripy, :endpoint, "https://api.stripe.com/v1/")
 
     url = url(api_url, resource, data)
-    HTTPoison.request(action, url, "", headers(header_params))
+    HTTPoison.request(action, url, "", headers(header_params), options)
   end
 
   @doc "Parses an HTTPoison response from a Stripe API call."
