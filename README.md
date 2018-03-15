@@ -8,7 +8,8 @@ if such are needed.
 
 Stripy takes care of setting headers, encoding the data,
 configuration settings, etc (the usual boring boilerplate);
-it also provides a `parse/1` helper function for decoding.
+it also makes testing easy by letting you plug your own
+mock server (see Testing sectio below).
 
 Some basic examples:
 
@@ -45,9 +46,60 @@ config :stripy,
   httpoison: [recv_timeout: 5000, timeout: 8000] # optional
 ```
 
-## About
+## Testing
 
-<img src="https://app.heresy.io/images/logo-dark.svg" height="50px">
+You can disable actual calls to the Stripe API like so:
+
+```elixir
+# Usually in your test.exs.
+config :stripy,
+  testing: true
+```
+
+All functions that use Stripy would receive response `{:ok, %{status_code: 200, body: "{}"}}`.
+
+To provide your own responses, you need to configure a mock server:
+
+```elixir
+config :stripy,
+  testing: true,
+  mock_server: MyApp.StripeMockServer
+```
+
+Here's an example mock server that mocks the `/customer` endpoint and returns a basic
+object for a customer with id `cus_test`
+
+```elixir
+defmodule MyApp.StripeMockServer do
+  @behaviour Stripy.MockServer
+
+  @ok_res %{status_code: 200}
+
+  @impl Stripy.MockServer
+  def request(:get, "customers/cus_test", %{}) do
+    body = Poison.encode!(%{"email" => "email@email.com"})
+    {:ok, Map.put(@ok_res, :body, body)}
+  end
+end
+```
+
+Now let's quickly write a naive function that gets user's billing email:
+
+```elixir
+def stripe_email(user) do
+  {:ok, res} = Stripy.req(:get, "customers/#{user.stripe_id")
+  res["email"]
+end
+```
+
+We can test it like so:
+
+```elixir
+fake_user = %{stripe_id: "cus_test"}
+assert stripe_email(fake_user) == "email@email.com"
+```
+
+## About
 
 This project is sponsored by [Heresy](http://heresy.io). We're always looking for great engineers to join our team, so if you love Elixir, open source and enjoy some challenge, drop us a line and say hello!
 
