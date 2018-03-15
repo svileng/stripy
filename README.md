@@ -9,7 +9,7 @@ if such are needed.
 Stripy takes care of setting headers, encoding the data,
 configuration settings, etc (the usual boring boilerplate);
 it also makes testing easy by letting you plug your own
-mock server (see Testing sectio below).
+mock server (see Testing section below).
 
 Some basic examples:
 
