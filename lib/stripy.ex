@@ -55,9 +55,10 @@ defmodule Stripy do
       version: Application.get_env(:stripy, :version, "2017-06-05")
     }
     api_url = Application.get_env(:stripy, :endpoint, "https://api.stripe.com/v1/")
+    options = Application.get_env(:stripy, :httpoison, [])
 
     url = url(api_url, resource, data)
-    HTTPoison.request(action, url, "", headers(header_params))
+    HTTPoison.request(action, url, "", headers(header_params), options)
   end
 
   @doc "Parses an HTTPoison response from a Stripe API call."
