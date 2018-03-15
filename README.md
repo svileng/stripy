@@ -42,7 +42,7 @@ config :stripy,
   secret_key: "sk_test_xxxxxxxxxxxxx", # required
   endpoint: "https://api.stripe.com/v1/", # optional
   version: "2017-06-05", # optional
-  httpoison: [recv_timeout: 10_000, timeout: 5000] # optional
+  httpoison: [recv_timeout: 5000, timeout: 8000] # optional
 ```
 
 ## About
