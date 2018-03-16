@@ -50,15 +50,20 @@ defmodule Stripy do
       {:ok, %HTTPoison.Response{...}}
   """
   def req(action, resource, data \\ %{}) when action in [:get, :post, :delete] do
-    header_params = %{
-      secret_key: Application.fetch_env!(:stripy, :secret_key),
-      version: Application.get_env(:stripy, :version, "2017-06-05")
-    }
-    api_url = Application.get_env(:stripy, :endpoint, "https://api.stripe.com/v1/")
-    options = Application.get_env(:stripy, :httpoison, [])
+    if Application.get_env(:stripy, :testing, false) do
+      mock_server = Application.get_env(:stripy, :mock_server, Stripy.MockServer)
+      mock_server.request(action, resource, data)
+    else
+      header_params = %{
+        secret_key: Application.fetch_env!(:stripy, :secret_key),
+        version: Application.get_env(:stripy, :version, "2017-06-05")
+      }
+      api_url = Application.get_env(:stripy, :endpoint, "https://api.stripe.com/v1/")
+      options = Application.get_env(:stripy, :httpoison, [])
 
-    url = url(api_url, resource, data)
-    HTTPoison.request(action, url, "", headers(header_params), options)
+      url = url(api_url, resource, data)
+      HTTPoison.request(action, url, "", headers(header_params), options)
+    end
   end
 
   @doc "Parses an HTTPoison response from a Stripe API call."
