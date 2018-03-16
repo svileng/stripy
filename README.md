@@ -87,7 +87,7 @@ Now let's quickly write a naive function that gets user's billing email:
 
 ```elixir
 def stripe_email(user) do
-  {:ok, res} = Stripy.req(:get, "customers/#{user.stripe_id")
+  {:ok, res} = Stripy.req(:get, "customers/#{user.stripe_id}")
   res["email"]
 end
 ```
