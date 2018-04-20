@@ -101,6 +101,8 @@ assert stripe_email(fake_user) == "email@email.com"
 
 ## About
 
+<img src="https://blog.heresy.io/content/images/2017/12/logo-white.png" alt="Heresy logo" width=300>
+
 This project is sponsored by [Heresy](http://heresy.io). We're always looking for great engineers to join our team, so if you love Elixir, open source and enjoy some challenge, drop us a line and say hello!
 
 ## License
