@@ -46,6 +46,15 @@ config :stripy,
   httpoison: [recv_timeout: 5000, timeout: 8000] # optional
 ```
 
+The secret key can be configured at runtime by passing it to `Stripy.req/4`:
+
+``` elixir
+iex> Stripy.req(:post, "customers",
+...iex> %{"email" => "a@b.c", "metadata[user_id]" => 1},
+...iex> [secret_key: "sk_test_xxxxxxxxxxxxx"])
+{:ok, %HTTPoison.Response{...}}
+```
+
 ## Testing
 
 You can disable actual calls to the Stripe API like so:
