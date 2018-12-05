@@ -1,5 +1,8 @@
 # Changelog
 
+# 1.2.1 (2018-12-05)
+- Relaxed `HTTPoison` dependency version.
+
 # 1.2.0 (2018-03-16)
 - Introducing `testing` mode and `Stripy.MockServer` behaviour for easier testing.
 
