@@ -108,4 +108,4 @@ This project is sponsored by [Heresy](http://heresy.io). We're always looking fo
 ## License
 
 - Stripy: See LICENSE file.
-- "Heresy" name and logo: Copyright © 2017 Heresy Software Ltd
+- "Heresy" name and logo: Copyright © 2019 Heresy Software Ltd
