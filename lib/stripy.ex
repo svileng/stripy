@@ -25,10 +25,18 @@ defmodule Stripy do
   """
 
   @doc "Constructs HTTPoison header list with auth."
-  def headers(%{secret_key: sk, version: v}) do
-    [{"Authorization", "Bearer #{sk}"},
-     {"Content-Type", "application/x-www-form-urlencoded"},
-     {"Stripe-Version", v}]
+  def headers(params) do
+    base_headers = [{"Content-Type", "application/x-www-form-urlencoded"}]
+
+    Enum.reduce(params, base_headers,
+      fn
+        {:secret_key, sk}, headers ->
+          [{"Authorization", "Bearer #{sk}"} | headers]
+        {:version, v}, headers ->
+          [{"Stripe-Version", v} | headers]
+        {:stripe_account, id}, headers ->
+          [{"Stripe-Account", id} | headers]
+      end)
   end
 
   @doc "Constructs url with query params from given data."
@@ -58,6 +66,14 @@ defmodule Stripy do
         secret_key: Application.fetch_env!(:stripy, :secret_key),
         version: Application.get_env(:stripy, :version, "2017-06-05")
       }
+
+      header_params =
+        case Keyword.get(opts, :stripe_account) do
+          nil -> header_params
+          id ->
+            Map.put(header_params, :stripe_account, id)
+        end
+
       api_url = Application.get_env(:stripy, :endpoint, "https://api.stripe.com/v1/")
       options = Application.get_env(:stripy, :httpoison, [])
 
