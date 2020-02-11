@@ -26,6 +26,16 @@ Where `subscriptions` and `customers` are [REST API resources](https://stripe.co
 If you prefer to work with a higher-level library, check out
 "stripity_stripe" or "stripe_elixir" on Hex.
 
+An optional 4th parameter can be supplied (a Keyword list of options):
+
+```elixir
+Stripy.req(:post, "charges", %{amount: 1000, currency: "USD"},
+  [stripe_account: "acct_12345678",
+   version: "2017-06-05",
+   secret_key: "sk_12345679",
+   idempotency_key: "123456"])
+```
+
 ## Installation
 
 Add to your `mix.exs` as usual:
