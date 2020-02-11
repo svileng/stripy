@@ -26,22 +26,12 @@ Where `subscriptions` and `customers` are [REST API resources](https://stripe.co
 If you prefer to work with a higher-level library, check out
 "stripity_stripe" or "stripe_elixir" on Hex.
 
-An optional 4th parameter can be supplied (a Keyword list of options):
-
-```elixir
-Stripy.req(:post, "charges", %{amount: 1000, currency: "USD"},
-  [stripe_account: "acct_12345678",
-   version: "2017-06-05",
-   secret_key: "sk_12345679",
-   idempotency_key: "123456"])
-```
-
 ## Installation
 
 Add to your `mix.exs` as usual:
 ```elixir
 def deps do
-  [{:stripy, "~> 1.0"}]
+  [{:stripy, "~> 2.0"}]
 end
 ```
 If you're not using [application inference](https://elixir-lang.org/blog/2017/01/05/elixir-v1-4-0-released/#application-inference), then add `:stripy` to your `applications` list.
@@ -109,13 +99,14 @@ fake_user = %{stripe_id: "cus_test"}
 assert stripe_email(fake_user) == "email@email.com"
 ```
 
-## About
+## Custom headers
 
-<img src="http://cdn.heresy.io/media/logo.png" alt="Heresy logo" width=300>
+You can add custom headers to the request by supplying a fourth parameter:
 
-This project is sponsored by [Heresy](http://heresy.io). We're always looking for great engineers to join our team, so if you love Elixir, open source and enjoy some challenge, drop us a line and say hello!
+```elixir
+Stripy.req(:post, "charges", %{amount: 1000}, %{"Idempotency-Key" => "123456"})
+```
 
 ## License
 
 - Stripy: See LICENSE file.
-- "Heresy" name and logo: Copyright © 2019 Heresy Software Ltd

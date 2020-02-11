@@ -1,13 +1,13 @@
 defmodule Stripy.Mixfile do
   use Mix.Project
 
-  @version "1.2.1"
+  @version "2.0.0"
 
   def project do
     [
       app: :stripy,
       version: @version,
-      elixir: "~> 1.3",
+      elixir: "~> 1.7",
       name: "Stripy",
       description: "Micro wrapper for the Stripe REST API",
       package: package(),
@@ -26,16 +26,18 @@ defmodule Stripy.Mixfile do
   end
 
   defp deps do
-    [{:httpoison, "~> 0.13 or ~> 1.0"},
-     {:poison, "~> 3.1"},
-     {:ex_doc, "~> 0.18", only: :dev, runtime: false}]
+    [
+      {:httpoison, "~> 0.13 or ~> 1.0"},
+      {:poison, "~> 3.1"},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false}
+    ]
   end
 
   defp package do
     [
       maintainers: ["Svilen Gospodinov <svilen@heresy.io>"],
       licenses: ["MIT"],
-      links: %{github: "https://github.com/heresydev/stripy"}
+      links: %{Github: "https://github.com/heresydev/stripy"}
     ]
   end
 end

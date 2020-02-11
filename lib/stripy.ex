@@ -24,39 +24,7 @@ defmodule Stripy do
   check out "stripity_stripe" or "stripe_elixir" on Hex.
   """
 
-  @doc """
-  Constructs HTTPoison header list.
-
-  ## Options
-
-   * `:secret_key` - Sets the `Authorization` header with a stripe Secret Key
-    for this request
-
-   * `:version` - override the `Stripe-Version` header, defaults to `2017-06-05`
-
-   * `:stripe_account` - sets the `Stripe-Account` header for use with
-    [Stripe Connect](https://stripe.com/docs/connect/authentication#stripe-account-header)
-
-   * `:idempotency_key` - sets the
-    [`Idempotency-Key` header](https://stripe.com/docs/api/idempotent_requests)
-  """
-  def headers(params) do
-    base_headers = [{"Content-Type", "application/x-www-form-urlencoded"}]
-
-    Enum.reduce(params, base_headers, fn
-      {:secret_key, sk}, headers ->
-        [{"Authorization", "Bearer #{sk}"} | headers]
-
-      {:version, v}, headers ->
-        [{"Stripe-Version", v} | headers]
-
-      {:stripe_account, id}, headers ->
-        [{"Stripe-Account", id} | headers]
-
-      {:idempotency_key, key}, headers ->
-        [{"Idempotency-Key", key} | headers]
-    end)
-  end
+  @content_type_header %{"Content-Type" => "application/x-www-form-urlencoded"}
 
   @doc "Constructs url with query params from given data."
   def url(api_url, resource, data) do
@@ -69,7 +37,10 @@ defmodule Stripy do
   Will return an HTTPoison standard response; see `parse/1`
   for decoding the response body.
 
-  See `headers/1` for a list of options.
+  You can specify custom headers to be included in the request
+  to Stripe, such as `Idempotency-Key`, `Stripe-Account` or any
+  other header. Just pass a map as the fourth argument.
+  See example below.
 
   ## Examples
       iex> Stripy.req(:get, "subscriptions")
@@ -77,24 +48,31 @@ defmodule Stripy do
 
       iex> Stripy.req(:post, "customers", %{"email" => "a@b.c", "metadata[user_id]" => 1})
       {:ok, %HTTPoison.Response{...}}
+
+      iex> Stripy.req(:post, "customers", %{"email" => "a@b.c"}, %{"Idempotency-Key" => "ABC"})
+      {:ok, %HTTPoison.Response{...}}
   """
-  def req(action, resource, data \\ %{}, opts \\ []) when action in [:get, :post, :delete] do
+  def req(action, resource, data \\ %{}, headers \\ %{}) when action in [:get, :post, :delete] do
     if Application.get_env(:stripy, :testing, false) do
       mock_server = Application.get_env(:stripy, :mock_server, Stripy.MockServer)
       mock_server.request(action, resource, data)
     else
-      header_params =
-        [
-          secret_key: Application.fetch_env!(:stripy, :secret_key),
-          version: Application.get_env(:stripy, :version, "2017-06-05")
-        ]
-        |> Keyword.merge(opts)
+      secret_key = Application.fetch_env!(:stripy, :secret_key)
+
+      headers =
+        @content_type_header
+        |> Map.merge(%{
+          "Authorization" => "Bearer #{secret_key}",
+          "Stripe-Version" => Application.get_env(:stripy, :version, "2017-06-05")
+        })
+        |> Map.merge(headers)
+        |> Map.to_list()
 
       api_url = Application.get_env(:stripy, :endpoint, "https://api.stripe.com/v1/")
       options = Application.get_env(:stripy, :httpoison, [])
 
       url = url(api_url, resource, data)
-      HTTPoison.request(action, url, "", headers(header_params), options)
+      HTTPoison.request(action, url, "", headers, options)
     end
   end
 

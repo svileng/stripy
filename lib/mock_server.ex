@@ -9,7 +9,7 @@ defmodule Stripy.MockServer do
   """
 
   @doc "Request made by client."
-  @callback request(atom, String.t, map) :: tuple
+  @callback request(atom, String.t(), map) :: tuple
 
   def request(action, resource, body) do
     IO.puts("Stripy.MockServer #{to_string(action)} #{resource} #{inspect(body)}")
