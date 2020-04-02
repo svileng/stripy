@@ -46,6 +46,15 @@ config :stripy,
   httpoison: [recv_timeout: 5000, timeout: 8000] # optional
 ```
 
+You may also use environment variables:
+
+``` elixir
+config :stripy,
+  secret_key: {:system, "STRIPE_SECRET_KEY"},
+  endpoint: {:system, "STRIPE_ENDPOINT"},
+  version: {:system, "STRIPE_VERSION"}
+```
+
 ## Testing
 
 You can disable actual calls to the Stripe API like so:
