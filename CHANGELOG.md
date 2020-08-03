@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.1.0 (2020-02-11)
+## New features
+- Allow fetching config at runtime, for example `{:system, "ENV_VAR"}` in `config.exs`
+
 # 2.0.0 (2020-02-11)
 ## Breaking changes
 - Removed `headers/1` in favour of new `req/4` (see below)

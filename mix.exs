@@ -1,7 +1,7 @@
 defmodule Stripy.Mixfile do
   use Mix.Project
 
-  @version "2.0.0"
+  @version "2.1.0"
 
   def project do
     [
@@ -14,7 +14,7 @@ defmodule Stripy.Mixfile do
       docs: [
         main: "readme",
         extras: ["README.md"],
-        source_url: "https://github.com/heresydev/stripy",
+        source_url: "https://github.com/svileng/stripy",
         source_ref: @version
       ],
       deps: deps()
@@ -35,9 +35,9 @@ defmodule Stripy.Mixfile do
 
   defp package do
     [
-      maintainers: ["Svilen Gospodinov <svilen@heresy.io>"],
+      maintainers: ["Svilen Gospodinov <webmaster@s2g.io>"],
       licenses: ["MIT"],
-      links: %{Github: "https://github.com/heresydev/stripy"}
+      links: %{GitHub: "https://github.com/svileng/stripy"}
     ]
   end
 end
